@@ -1,16 +1,14 @@
-import * as console from 'readline';
+import * as readlineNative from 'readline';
 
-export const interfazConsola = console.createInterface({
+export const rl = readlineNative.createInterface({
   input: process.stdin,
   output: process.stdout,
 });
 
-export function preguntar(textoPregunta: string): Promise<string> {
-  return new Promise((resolver) => {
-    interfazConsola.question(textoPregunta, resolver);
-  });
+export function question(queryText: string): Promise<string> {
+  return new Promise((resolve) => rl.question(queryText, resolve));
 }
 
-export function pausar(): Promise<string> {
-  return preguntar('\nPresione ENTER para continuar...');
+export function pause(): Promise<string> {
+  return question('\nPresione ENTER para continuar...');
 }
