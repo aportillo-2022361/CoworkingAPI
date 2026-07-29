@@ -1,17 +1,31 @@
 import { pool } from './DB';
-import { Desk } from '../modules/desksModule';
 
 export class DesksRepository {
-  async getAll(): Promise<Desk[]> {
-    const res = await pool.query('SELECT * FROM desks ORDER BY id ASC');
-    return res.rows;
+  async getDesks() {
+    const query = `
+      SELECT d.id, d.code, s.name AS space_name, s.building
+      FROM desks d
+      JOIN spaces s ON d.space_id = s.id
+      ORDER BY d.id ASC;
+    `;
+    const result = await pool.query(query);
+    return result.rows;
   }
 
-  async create(code: string, spaceId: number): Promise<Desk> {
-    const res = await pool.query(
-      'INSERT INTO desks (code, space_id) VALUES ($1, $2) RETURNING *',
-      [code, spaceId]
-    );
-    return res.rows[0];
+  async createDesk(spaceId: number, code: string) {
+    try {
+      const query = `
+        INSERT INTO desks (space_id, code)
+        VALUES ($1, $2)
+        RETURNING *;
+      `;
+      const result = await pool.query(query, [spaceId, code]);
+      return result.rows[0];
+    } catch (error: any) {
+      if (error.code === '23503') {
+        throw new Error(`No se puede crear el escritorio: El espacio con ID ${spaceId} no existe.`);
+      }
+      throw error;
+    }
   }
 }
