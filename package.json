@@ -1,16 +1,23 @@
 {
-  "name": "Ejemplo Ts",
+  "name": "coworking-api",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "dist/index.js",
   "scripts": {
     "dev": "tsx src/index.ts",
-    "test": ""
+    "build": "tsc"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
+  "dependencies": {
+    "dotenv": "^17.4.2",
+    "pg": "^8.11.5"
+  },
   "devDependencies": {
+    "@types/node": "^20.11.0",
+    "@types/pg": "^8.11.0",
+    "typescript": "^5.3.3",
     "tsx": "^4.22.4"
   }
 }
